@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:vm="using:RimWorldModUpdater.ViewModels"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+            x:Class="RimWorldModUpdater.Views.ModListView"
+            x:DataType="vm:ModListViewModel">
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Margin="5"
+                    IsEnabled="{Binding !IsBusy}"
+                    Command="{Binding UpdateSelectedCommand}"
+                    Content="{DynamicResource Text.ButtonUpdateSelected}" />
+        </StackPanel>
+        <ScrollViewer>
+            <StackPanel Grid.IsSharedSizeScope="True">
+                <Grid RowDefinitions="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="A" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="B" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="C" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="D" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="E" Width="Auto" />
+                        <ColumnDefinition SharedSizeGroup="F" Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="1" Text="{DynamicResource Text.ModName}" Margin="5" />
+                    <TextBlock Grid.Column="2" Text="{DynamicResource Text.ModAuthor}" Margin="5" />
+                    <TextBlock Grid.Column="3" Text="{DynamicResource Text.LocalVersion}" Margin="5" />
+                    <TextBlock Grid.Column="4" Text="{DynamicResource Text.RemoteVersion}" Margin="5" />
+                    <TextBlock Grid.Column="5" Text="{DynamicResource Text.Description}" Margin="5" />
+                </Grid>
+
+                <Separator />
+                <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" />
+
+                <ItemsControl ItemsSource="{Binding ViewMods}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <ProgressBar DockPanel.Dock="Bottom" IsVisible="{Binding IsUpdating}"
+                                             Minimum="0" Maximum="100" Value="{Binding UpdateProgress}" />
+                                <Grid RowDefinitions="auto"
+                                        ToolTip.Tip="{Binding Description}"
+                                        ToolTip.ShowDelay="200">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="A" />
+                                        <ColumnDefinition SharedSizeGroup="B" />
+                                        <ColumnDefinition SharedSizeGroup="C" />
+                                        <ColumnDefinition SharedSizeGroup="D" />
+                                        <ColumnDefinition SharedSizeGroup="E" />
+                                        <ColumnDefinition SharedSizeGroup="F" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="5" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Author}" Margin="5" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding LocalVersion}" Margin="5" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="4" Text="{Binding RemoteVersion}" Margin="5" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="5" Text="{Binding DescriptionString}" Margin="5" VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis" MaxLines="1" />
+                                </Grid>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+
+</UserControl>

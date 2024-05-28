@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <x:String x:Key="Text.About" xml:space="preserve">About</x:String>
+    <x:String x:Key="Text.Main" xml:space="preserve">Mods</x:String>
+    <x:String x:Key="Text.Settings" xml:space="preserve">Settings</x:String>
+    <x:String x:Key="Text.WindowTitle" xml:space="preserve">RimWorld Mod Updater</x:String>
+    <x:String x:Key="Text.AboutText" xml:space="preserve">This application helps you to download and update non-workshop RimWorld mods.
+Very WIP.
+    </x:String>
+    <x:String x:Key="Text.ButtonGotIt" xml:space="preserve">Got it!</x:String>
+    <x:String x:Key="Text.ModName" xml:space="preserve">Mod Name</x:String>
+    <x:String x:Key="Text.ModAuthor" xml:space="preserve">Author</x:String>
+    <x:String x:Key="Text.LocalVersion" xml:space="preserve">Local ver</x:String>
+    <x:String x:Key="Text.RemoteVersion" xml:space="preserve">Remote ver</x:String>
+    <x:String x:Key="Text.Description" xml:space="preserve">Description</x:String>
+    <x:String x:Key="Text.ButtonUpdateSelected" xml:space="preserve">Download or update selected</x:String>
+
+    <x:String x:Key="Text.RimWorldFolder" xml:space="preserve">RimWorld Folder</x:String>
+    <x:String x:Key="Text.SelectFolder" xml:space="preserve">Select Folder</x:String>
+    <x:String x:Key="Text.Language" xml:space="preserve">Language</x:String>
+    <x:String x:Key="Text.RimWorldVersion" xml:space="preserve">Game version</x:String>
+    <x:String x:Key="Text.AppVersion" xml:space="preserve">App version</x:String>
+</ResourceDictionary>

@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:vm="using:RimWorldModUpdater.ViewModels"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+            x:Class="RimWorldModUpdater.Views.SettingsView"
+            x:DataType="vm:SettingsViewModel">
+
+    <Grid RowDefinitions="auto, auto, auto, auto, auto">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" Text="{DynamicResource Text.RimWorldFolder}" Margin="5" VerticalAlignment="Center" />
+        <DockPanel Grid.Column="1" Grid.Row="0">
+            <Button DockPanel.Dock="Right"
+                    Command="{Binding SelectRimworldFolderCommand}"
+                    Content="{DynamicResource Text.SelectFolder}"
+                    Margin="5,0,0,0" />
+            <TextBox Text="{Binding RimWorldFolder}" />
+        </DockPanel>
+
+        <TextBlock Text="{Binding FolderError}"
+                    IsVisible="{Binding FolderError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Grid.Column="1" Grid.Row="1"
+                    Foreground="#ff0000"
+                    Padding="0,0,0,5" />
+
+        <!--<TextBlock Grid.Column="0" Grid.Row="2" Text="{DynamicResource Text.Language}" Margin="5" VerticalAlignment="Center" />
+        <ComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Locales}" SelectedIndex="{Binding SelectedLocaleIndex}" />-->
+
+        <TextBlock Grid.Column="0" Grid.Row="3" Text="{DynamicResource Text.RimWorldVersion}" Margin="5" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding RimWorldVersion}" VerticalAlignment="Center" />
+
+        <TextBlock Grid.Column="0" Grid.Row="4" Text="{DynamicResource Text.AppVersion}" Margin="5" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding AppVersion}" VerticalAlignment="Center" />
+    </Grid>
+
+</UserControl>
