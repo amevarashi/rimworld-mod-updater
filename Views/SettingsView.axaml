@@ -7,7 +7,7 @@
             x:Class="RimWorldModUpdater.Views.SettingsView"
             x:DataType="vm:SettingsViewModel">
 
-    <Grid RowDefinitions="auto, auto, auto, auto, auto">
+    <Grid RowDefinitions="auto, auto, auto, auto, auto, auto, auto">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*" />
@@ -36,6 +36,15 @@
 
         <TextBlock Grid.Column="0" Grid.Row="4" Text="{DynamicResource Text.AppVersion}" Margin="5" VerticalAlignment="Center" />
         <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding AppVersion}" VerticalAlignment="Center" />
+
+        <TextBlock Grid.Column="0" Grid.Row="5" Text="{DynamicResource Text.ModSourcesUri}" Margin="5" VerticalAlignment="Center" />
+        <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding ModSourcesUri}" />
+
+        <TextBlock Text="{Binding ModSourcesError}"
+                    IsVisible="{Binding ModSourcesError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Grid.Column="1" Grid.Row="7"
+                    Foreground="#ff0000"
+                    Padding="0,0,0,5" />
     </Grid>
 
 </UserControl>

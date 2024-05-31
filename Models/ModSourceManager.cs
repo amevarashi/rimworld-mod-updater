@@ -11,12 +11,52 @@ namespace RimWorldModUpdater.Models;
 public class ModSourceManager
 {
     private const string CACHE_FILE_NAME = "modSourcesCache.json";
-    private const string URI = "https://gitgud.io/amevarashi/rjw-mod-sources/-/raw/master/ModSources.json";
     private static readonly HttpClient httpClient = new() { Timeout = TimeSpan.FromSeconds(30) };
 
-    public static async Task<IModSource[]> GetModSourcesAsync(CancellationToken cancellationToken)
+    public static async Task<bool> IsValidModSourcesUri(string modSourcesUri, CancellationToken cancellationToken = default)
     {
-        string json = await GetModSourceJsonAsync(cancellationToken);
+        App.Log.Information($"Validating {modSourcesUri} as a ModSources list");
+        string? json;
+
+        try
+        {
+            json = await DownloadModSourceInfosAsync(modSourcesUri, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            App.Log.Information($"{modSourcesUri} is not a valid ModSources - {e.Message}");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            App.Log.Information($"{modSourcesUri} is not a valid ModSources - json is empty");
+            return false;
+        }
+
+        try
+        {
+            ModSourceInfo[]? modSourceInfos = JsonSerializer.Deserialize<ModSourceInfo[]?>(json);
+            if (modSourceInfos is null || modSourceInfos?.Length == 0)
+            {
+                App.Log.Information($"{modSourcesUri} is not a valid ModSources - list is empty");
+                return false;
+            }
+        }
+        catch (Exception)
+        {
+            App.Log.Information($"{modSourcesUri} is not a valid ModSources - exception in deserialization");
+            return false;
+        }
+
+        App.Log.Information($"{modSourcesUri} is a valid ModSources list");
+        await SaveCacheAsync(App.SettingFolder, json, cancellationToken);
+        return true;
+    }
+
+    public static async Task<IModSource[]> GetModSourcesAsync(string modSourcesUri, CancellationToken cancellationToken)
+    {
+        string json = await GetModSourcesJsonAsync(modSourcesUri, cancellationToken);
 
         ModSourceInfo[]? modSourceInfos;
 
@@ -75,9 +115,11 @@ public class ModSourceManager
         return modSources;
     }
 
-    private static async Task<string> GetModSourceJsonAsync(CancellationToken cancellationToken)
+    private static async Task<string> GetModSourcesJsonAsync(string remoteUri, CancellationToken cancellationToken)
     {
-        string? json = await LoadCacheAsync(App.SettingFolder, cancellationToken);
+        string? json;
+
+        json = await LoadCacheAsync(App.SettingFolder, cancellationToken);
 
         if (json != null)
         {
@@ -85,11 +127,11 @@ public class ModSourceManager
             return json;
         }
 
-        json = await DownloadModSourceInfosAsync(URI, cancellationToken);
+        json = await DownloadModSourceInfosAsync(remoteUri, cancellationToken);
 
         if (json is null)
         {
-            throw new ModSourcesException($"Failed to download modSourceInfos from {URI}, reason unknown");
+            throw new ModSourcesException($"Failed to download modSourceInfos from {remoteUri}, reason unknown");
         }
 
         await SaveCacheAsync(App.SettingFolder, json, cancellationToken);

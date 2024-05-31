@@ -19,4 +19,5 @@ Very WIP.
     <x:String x:Key="Text.Language" xml:space="preserve">Language</x:String>
     <x:String x:Key="Text.RimWorldVersion" xml:space="preserve">Game version</x:String>
     <x:String x:Key="Text.AppVersion" xml:space="preserve">App version</x:String>
+    <x:String x:Key="Text.ModSourcesUri" xml:space="preserve">Mod list URI</x:String>
 </ResourceDictionary>

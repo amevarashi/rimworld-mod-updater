@@ -22,6 +22,7 @@ sealed class Program
         {
             // here we can work with the exception, for example add it to our log file
             App.Log.Fatal(e, "Epic fail");
+            throw;
         }
     }
 

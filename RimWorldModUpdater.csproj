@@ -49,8 +49,4 @@
     <PackageReference Include="Serilog" Version="*" />
     <PackageReference Include="Serilog.Sinks.Console" Version="*" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <Content Include="$(SolutionDir)Languages\**" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>-->
 </Project>

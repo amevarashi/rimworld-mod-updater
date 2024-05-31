@@ -143,7 +143,7 @@ public class ModListViewModel : ViewModelBase
 
         IsBusy = true;
 
-        IModSource[] modSources = await ModSourceManager.GetModSourcesAsync(cancellationToken);
+        IModSource[] modSources = await ModSourceManager.GetModSourcesAsync(App.UserSettings.ModSourcesUri, cancellationToken);
 
         if (modSources.Length == 0)
         {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using ReactiveUI;
+using RimWorldModUpdater.Models;
 using Splat;
 
 namespace RimWorldModUpdater.ViewModels;
@@ -30,6 +31,19 @@ public class SettingsViewModel : ViewModelBase
     {
         get => folderError;
         set => this.RaiseAndSetIfChanged(ref folderError, value);
+    }
+
+    public string ModSourcesUri
+    {
+        get => App.UserSettings!.ModSourcesUri;
+        set => this.RaiseAndSetIfChanged(ref App.UserSettings!.modSourcesUri, value);
+    }
+
+    private string modSourcesError = string.Empty;
+    public string ModSourcesError
+    {
+        get => modSourcesError;
+        set => this.RaiseAndSetIfChanged(ref modSourcesError, value);
     }
 
     private ObservableCollection<string> locales = ["en_US"];
@@ -64,10 +78,8 @@ public class SettingsViewModel : ViewModelBase
         SelectRimworldFolderCommand = ReactiveCommand.CreateFromTask(SelectRimworldFolder);
 
         finishedSetup = this
-            .WhenAnyValue(x => x.RimWorldFolder)
-            .Throttle(TimeSpan.FromMilliseconds(500))
-            //.ObserveOn(RxApp.MainThreadScheduler)
-            .Select(par => IsRimWorldDir(par))
+            .WhenAnyValue(x => x.FolderError, y => y.ModSourcesError)
+            .Select(par => string.IsNullOrWhiteSpace(par.Item1) && string.IsNullOrWhiteSpace(par.Item2))
             .ToProperty(this, x => x.FinishedSetup);
 
         this.WhenAnyValue(x => x.RimWorldFolder, x => x.SelectedLocaleIndex)
@@ -75,16 +87,24 @@ public class SettingsViewModel : ViewModelBase
             .Select(x => new Unit())
             .InvokeCommand(this, x => x.SaveUserSettingsCommand);
 
-        selectedLocaleIndex = App.UserSettings!.ActiveLocale == "en_US" ? 0 : 1;
+        this.WhenAnyValue(x => x.RimWorldFolder)
+            .Throttle(TimeSpan.FromMilliseconds(500))
+            .Subscribe(IsRimWorldDir);
+
+        this.WhenAnyValue(x => x.ModSourcesUri)
+            .Throttle(TimeSpan.FromSeconds(1))
+            .Subscribe(CheckModSourcesUri);
+
+        //selectedLocaleIndex = App.UserSettings!.ActiveLocale == "en_US" ? 0 : 1;
         //this.WhenAnyValue(x => x.SelectedLocaleIndex).Subscribe(x => App.SetLocale(x));
     }
 
-    private bool IsRimWorldDir(string path)
+    private void IsRimWorldDir(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
         {
             FolderError = "This field is obligatory";
-            return false;
+            return;
         }
 
         DirectoryInfo directory = new(path);
@@ -92,24 +112,24 @@ public class SettingsViewModel : ViewModelBase
         if (!directory.Exists)
         {
             FolderError = "Folder does not exist";
-            return false;
+            return;
         }
 
         if (!Array.Exists(directory.GetFiles(), x => x.Name == "Version.txt"))
         {
             FolderError = "Version.txt not found in the folder";
-            return false;
+            return;
         }
 
         if (!Array.Exists(directory.GetDirectories(), x => x.Name == "Mods"))
         {
             FolderError = "Mods subfolder not found in the folder";
-            return false;
+            return;
         }
 
         FolderError = string.Empty;
         RimWorldVersion = File.ReadAllText(Path.Combine(directory.FullName, "Version.txt")).Trim();
-        return true;
+        return;
     }
 
     private async Task SelectRimworldFolder(CancellationToken cancellationToken)
@@ -123,6 +143,23 @@ public class SettingsViewModel : ViewModelBase
         }
 
         RimWorldFolder = selected[0].Path.LocalPath;
-        _ = IsRimWorldDir(RimWorldFolder); // To update error immediately
+        IsRimWorldDir(RimWorldFolder); // To update error immediately
+    }
+
+    private async void CheckModSourcesUri(string uri)
+    {
+        if (string.IsNullOrWhiteSpace(uri))
+        {
+            ModSourcesError = "This field is obligatory";
+            return;
+        }
+
+        if (!await ModSourceManager.IsValidModSourcesUri(uri))
+        {
+            ModSourcesError = "Not a valid";
+            return;
+        }
+
+        ModSourcesError = string.Empty;
     }
 }

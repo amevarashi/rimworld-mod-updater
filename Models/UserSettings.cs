@@ -15,6 +15,8 @@ public class UserSettings
     public string RimWorldFolder { get => rimWorldFolder; set => rimWorldFolder = value; }
     public string RimWorldModFolder => Path.Combine(RimWorldFolder, "Mods");
     public string ActiveLocale { get; set; } = "en_US";
+    public string modSourcesUri = string.Empty;
+    public string ModSourcesUri { get => modSourcesUri; set => modSourcesUri = value; }
     private readonly JsonSerializerOptions options = new() { WriteIndented = true };
 
     public static UserSettings? Load(string path)
@@ -35,7 +37,8 @@ public class UserSettings
     {
         UserSettings userSettings = new()
         {
-            RimWorldFolder = TryFindRimWorldFolder()
+            RimWorldFolder = TryFindRimWorldFolder(),
+            ModSourcesUri = "https://gitgud.io/amevarashi/rjw-mod-sources/-/raw/master/ModSources.json"
         };
 
         return userSettings;
