@@ -13,6 +13,10 @@ using Serilog;
 using Serilog.Core;
 using Splat;
 
+#if SELFUPDATE
+using System.Threading.Tasks;
+#endif
+
 namespace RimWorldModUpdater;
 
 public partial class App : Application
@@ -22,12 +26,16 @@ public partial class App : Application
             "RimWorldModUpdater");
     public static readonly Logger Log = new LoggerConfiguration()
             .MinimumLevel.Debug()
+            #if DEBUG
             .WriteTo.Console()
-            //.WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+            #else
+            .WriteTo.File("RimWorldModUpdater.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 2,
+                            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+            #endif
             .CreateLogger();
     public static UserSettings? UserSettings { get; private set; }
 
-    public static string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "fail";
+    public static Version Version { get; } = Assembly.GetExecutingAssembly().GetName().Version!;
 
     private ResourceDictionary? _activeLocale = null;
 
@@ -80,11 +88,29 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
+            // Self-update works only on assembly published with PublishSingleFile
+            #if SELFUPDATE
+            Task<string?> checkUpdates = Task.Run(async () => await SelfUpdateManager.CheckUpdates());
+            string? downloadUri = checkUpdates.GetAwaiter().GetResult();
+
+            if (downloadUri is not null)
             {
-                DataContext = new MainWindowViewModel(_activeLocale!),
-            };
-            Locator.CurrentMutable.RegisterConstant(desktop.MainWindow.StorageProvider, typeof(IStorageProvider));
+                desktop.MainWindow = new UpdateWindow
+                {
+                    DataContext = new UpdateWindowViewModel(downloadUri),
+                };
+            }
+            else
+            {
+            #endif
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel(_activeLocale!),
+                };
+                Locator.CurrentMutable.RegisterConstant(desktop.MainWindow.StorageProvider, typeof(IStorageProvider));
+            #if SELFUPDATE
+            }
+            #endif
         }
 
         base.OnFrameworkInitializationCompleted();

@@ -20,4 +20,7 @@ Very WIP.
     <x:String x:Key="Text.RimWorldVersion" xml:space="preserve">Game version</x:String>
     <x:String x:Key="Text.AppVersion" xml:space="preserve">App version</x:String>
     <x:String x:Key="Text.ModSourcesUri" xml:space="preserve">Mod list URI</x:String>
+
+    <x:String x:Key="Text.UpdateWindowTitle" xml:space="preserve">Updating</x:String>
+    <x:String x:Key="Text.DownloadingNewVersion" xml:space="preserve">Downloading update</x:String>
 </ResourceDictionary>

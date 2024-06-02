@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RimWorldModUpdater.ViewModels"
+        xmlns:views="using:RimWorldModUpdater.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:assets="clr-namespace:Assets"
+        mc:Ignorable="d" Width="400" Height="200"
+        x:Class="RimWorldModUpdater.Views.UpdateWindow"
+        x:DataType="vm:UpdateWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="{DynamicResource Text.UpdateWindowTitle}">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:UpdateWindowViewModel/>
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock Text="{DynamicResource Text.DownloadingNewVersion}" HorizontalAlignment="Center"/>
+        <ProgressBar DockPanel.Dock="Bottom" Minimum="0" Maximum="100" Value="{Binding DownloadProgress}" ShowProgressText="True" />
+    </StackPanel>
+
+</Window>

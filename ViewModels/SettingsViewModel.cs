@@ -67,7 +67,7 @@ public class SettingsViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref rimWorldVersion, value);
     }
 
-    public string AppVersion => App.Version;
+    public string AppVersion => App.Version.ToString();
 
     public ICommand SaveUserSettingsCommand { get; }
     public ICommand SelectRimworldFolderCommand { get; }

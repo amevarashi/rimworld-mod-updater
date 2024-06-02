@@ -7,7 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -24,7 +24,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;SELFUPDATE</DefineConstants>
     <ErrorReport>normal</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PublishSingleFile>true</PublishSingleFile>
@@ -48,5 +48,6 @@
     <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="*" />
     <PackageReference Include="Serilog" Version="*" />
     <PackageReference Include="Serilog.Sinks.Console" Version="*" />
+    <PackageReference Include="Serilog.Sinks.File" Version="*" />
   </ItemGroup>
 </Project>
