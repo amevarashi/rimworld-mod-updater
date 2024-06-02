@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using GameFinder.StoreHandlers.Steam;
 using GameFinder.StoreHandlers.Steam.Models.ValueTypes;
@@ -13,6 +14,7 @@ public class UserSettings
     public const string FILE_NAME = "settings.json";
     public string rimWorldFolder = string.Empty;
     public string RimWorldFolder { get => rimWorldFolder; set => rimWorldFolder = value; }
+    [JsonIgnore]
     public string RimWorldModFolder => Path.Combine(RimWorldFolder, "Mods");
     public string ActiveLocale { get; set; } = "en_US";
     public string modSourcesUri = string.Empty;
