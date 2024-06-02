@@ -5,10 +5,13 @@
     <x:String x:Key="Text.WindowTitle" xml:space="preserve">RimWorld Mod Updater</x:String>
     <x:String x:Key="Text.AboutText" xml:space="preserve">This application helps you to download and update non-workshop RimWorld mods.
 
+The application pre-selects mods that are installed and have a different version in the source.
+
 WIP.
 
 Known problems:
 - Requires restart after changing "RimWorld Folder" or "Mod list URI".
+- Some mods does not provide version.
     </x:String>
     <x:String x:Key="Text.ModName" xml:space="preserve">Mod Name</x:String>
     <x:String x:Key="Text.ModAuthor" xml:space="preserve">Author</x:String>

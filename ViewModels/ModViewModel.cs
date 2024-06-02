@@ -49,7 +49,7 @@ public class ModViewModel : ViewModelBase
 
     public ModViewModel(RimWorldMod mod, IModSource source)
     {
-        isSelected = !string.IsNullOrWhiteSpace(mod.LocalVersion) && mod.LocalVersion != mod.RemoteVersion;
+        isSelected = !string.IsNullOrWhiteSpace(mod.LocalVersion) && mod.LocalVersion != "n/a" && mod.LocalVersion != mod.RemoteVersion;
         Source = source;
         Mod = mod;
         UpdateProgress = 0f;
