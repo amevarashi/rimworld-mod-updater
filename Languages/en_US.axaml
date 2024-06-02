@@ -4,9 +4,12 @@
     <x:String x:Key="Text.Settings" xml:space="preserve">Settings</x:String>
     <x:String x:Key="Text.WindowTitle" xml:space="preserve">RimWorld Mod Updater</x:String>
     <x:String x:Key="Text.AboutText" xml:space="preserve">This application helps you to download and update non-workshop RimWorld mods.
-Very WIP.
+
+WIP.
+
+Known problems:
+- Requires restart after changing "RimWorld Folder" or "Mod list URI".
     </x:String>
-    <x:String x:Key="Text.ButtonGotIt" xml:space="preserve">Got it!</x:String>
     <x:String x:Key="Text.ModName" xml:space="preserve">Mod Name</x:String>
     <x:String x:Key="Text.ModAuthor" xml:space="preserve">Author</x:String>
     <x:String x:Key="Text.LocalVersion" xml:space="preserve">Local ver</x:String>

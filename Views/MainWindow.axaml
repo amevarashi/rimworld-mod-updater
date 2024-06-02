@@ -21,12 +21,6 @@
         <TabItem Header="{DynamicResource Text.About}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="{DynamicResource Text.AboutText}" HorizontalAlignment="Center"/>
-                <Button Margin="5"
-                        HorizontalAlignment="Center"
-                        Command="{Binding GotItCommand}"
-                        IsEnabled="{Binding !ReadAbout}"
-                        IsVisible="{Binding !ReadAbout}"
-                        Content="{DynamicResource Text.ButtonGotIt}" />
             </StackPanel>
         </TabItem>
 
@@ -34,7 +28,7 @@
             <views:ModListView DataContext="{Binding ModListViewModel}"/>
         </TabItem>
 
-        <TabItem Header="{DynamicResource Text.Settings}" IsVisible="{Binding ReadAbout}">
+        <TabItem Header="{DynamicResource Text.Settings}">
             <views:SettingsView DataContext="{Binding SettingsViewModel}"/>
         </TabItem>
     </TabControl>
