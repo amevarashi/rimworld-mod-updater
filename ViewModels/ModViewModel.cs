@@ -43,7 +43,7 @@ public class ModViewModel : ViewModelBase
     public string RemoteVersion => remoteVersion.Value ?? "?";
 
     public string Description => Mod.Description.Trim();
-    public string DescriptionString => Description.Replace(Environment.NewLine, " ");
+    public string DescriptionString => Description.Replace('\n', ' ');
     public RimWorldMod Mod { get; }
     private IModSource Source { get; }
 
