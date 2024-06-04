@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -47,7 +47,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.*" />
     <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="*" />
     <PackageReference Include="Serilog" Version="*" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="*" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Serilog.Sinks.Console" Version="*" />
     <PackageReference Include="Serilog.Sinks.File" Version="*" />
   </ItemGroup>
 </Project>
