@@ -59,12 +59,12 @@ public static class SelfUpdateManager
             if (OperatingSystem.IsWindows())
             {
                 App.Log.Information("Platform is Windows");
-                asset = release.Assets.FirstOrDefault(x => x.ContentType == "application/x-ms-dos-executable");
+                asset = release.Assets.FirstOrDefault(x => x.Name == "RimWorldModUpdater-win-x64.exe");
             }
             else if (OperatingSystem.IsLinux())
             {
                 App.Log.Information("Platform is Linux");
-                asset = release.Assets.FirstOrDefault(x => x.ContentType == "application/octet-stream");
+                asset = release.Assets.FirstOrDefault(x => x.Name == "RimWorldModUpdater-linux-x64");
             }
             else
             {
