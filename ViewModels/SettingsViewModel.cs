@@ -83,6 +83,7 @@ public class SettingsViewModel : ViewModelBase
             .ToProperty(this, x => x.FinishedSetup);
 
         this.WhenAnyValue(x => x.RimWorldFolder, x => x.SelectedLocaleIndex)
+            .Skip(1) // Fires on initialization
             .Throttle(TimeSpan.FromSeconds(2))
             .Select(x => new Unit())
             .InvokeCommand(this, x => x.SaveUserSettingsCommand);
@@ -92,6 +93,7 @@ public class SettingsViewModel : ViewModelBase
             .Subscribe(IsRimWorldDir);
 
         this.WhenAnyValue(x => x.ModSourcesUri)
+            .Skip(1) // Fires on initialization
             .Throttle(TimeSpan.FromSeconds(1))
             .Subscribe(CheckModSourcesUri);
 
