@@ -75,12 +75,28 @@ public class HttpGetModSource(ModSourceInfo modSourceInfo) : IModSource
     {
         MemoryStream content = new();
         await httpClient.DownloadAsync(DownloadLink, content, progress, cancellationToken);
-        using ZipArchive zip = new(content);
         string modsPath = App.UserSettings!.RimWorldModFolder;
+        ExtractZippedMod(content, modsPath, mod);
+        content.Dispose();
+    }
+
+    private static void ExtractZippedMod(Stream zipStream, string modsFolder, RimWorldMod mod)
+    {
+        using ZipArchive zip = new(zipStream);
+        char sep; // Not sure if this is the same for all platforms or follows path separators
 
         // found a mod that had About.xml in Languages
         ZipArchiveEntry? aboutInZip = zip.Entries.FirstOrDefault(x => x.FullName.EndsWith("About/About.xml"));
-        aboutInZip ??= zip.Entries.FirstOrDefault(x => x.FullName.EndsWith("About\\About.xml"));
+
+        if (aboutInZip != null)
+        {
+            sep = '/';
+        }
+        else
+        {
+            aboutInZip = zip.Entries.FirstOrDefault(x => x.FullName.EndsWith("About\\About.xml"));
+            sep = '\'';
+        }
 
         if (aboutInZip is null)
         {
@@ -88,18 +104,19 @@ public class HttpGetModSource(ModSourceInfo modSourceInfo) : IModSource
             return; // Stop update
         }
 
-        int deepth = aboutInZip.FullName.Count('/');
-
-        if (deepth == 0)
-        {
-            deepth = aboutInZip.FullName.Count('\'');
-        }
-
-        bool zipWithRootFolder = deepth == 2;
+        bool zipWithRootFolder = aboutInZip.FullName.Count(sep) == 2;
 
         if (mod.LocalDir is null)
         {
-            mod.LocalDir ??= new(Path.Combine(modsPath, mod.Name));
+            if (zipWithRootFolder)
+            {
+                string newFolderName = zip.Entries[0].FullName.Split(sep)[0];
+                mod.LocalDir = new(Path.Combine(modsFolder, newFolderName));
+            }
+            else
+            {
+                mod.LocalDir = new(Path.Combine(modsFolder, mod.Name));
+            }
         }
         else
         {
@@ -113,16 +130,13 @@ public class HttpGetModSource(ModSourceInfo modSourceInfo) : IModSource
 
         if (zipWithRootFolder)
         {
-            zip.ExtractToDirectory(modsPath);
-            string newFolderName = zip.Entries[0].FullName.Split('/', '\'')[0];
-            mod.LocalDir = new(Path.Combine(modsPath, newFolderName));
+            zip.ExtractToDirectory(modsFolder);
         }
         else
         {
             mod.LocalDir!.Create();
             zip.ExtractToDirectory(mod.LocalDir!.FullName);
         }
-        content.Dispose();
         mod.LocalVersion = mod.RemoteVersion;
     }
 
