@@ -22,7 +22,11 @@ namespace RimWorldModUpdater;
 public partial class App : Application
 {
     public static readonly string SettingFolder = Path.Combine(
+            #if DEBUG
+            "Debug",
+            #else
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            #endif
             "RimWorldModUpdater");
     public static readonly Logger Log = new LoggerConfiguration()
             .MinimumLevel.Debug()
