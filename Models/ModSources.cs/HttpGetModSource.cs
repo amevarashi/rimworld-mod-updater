@@ -86,7 +86,9 @@ public class HttpGetModSource(ModSourceInfo modSourceInfo) : IModSource
         char sep; // Not sure if this is the same for all platforms or follows path separators
 
         // found a mod that had About.xml in Languages
-        ZipArchiveEntry? aboutInZip = zip.Entries.FirstOrDefault(x => x.FullName.EndsWith("About/About.xml"));
+        // also found About/About.xml deep in the Menstruation folders
+        ZipArchiveEntry? aboutInZip = zip.Entries
+            .FirstOrDefault(x => x.FullName.EndsWith("About/About.xml") && x.FullName.Count('/') < 3);
 
         if (aboutInZip != null)
         {
@@ -94,7 +96,8 @@ public class HttpGetModSource(ModSourceInfo modSourceInfo) : IModSource
         }
         else
         {
-            aboutInZip = zip.Entries.FirstOrDefault(x => x.FullName.EndsWith("About\\About.xml"));
+            aboutInZip = zip.Entries
+                .FirstOrDefault(x => x.FullName.EndsWith("About\\About.xml") && x.FullName.Count('\\') < 3);
             sep = '\'';
         }
 
